@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Indonesia in Numbers — Economy</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="page">
+  <header class="masthead">
+    <div class="wordmark">Indonesia in Numbers</div>
+    <div class="edition">The Map Edition · 2024</div>
+  </header>
+  <nav class="pagenav">
+    <a href="index.html">Overview</a><a href="population.html">Population</a><a href="economy.html" class="current">Economy</a><a href="society.html">Society</a><a href="regions.html">Regions</a>
+  </nav>
+
+  <h1>Economy</h1>
+  <p class="lede">Tap a year: the headline and the chart restate themselves for that year.</p>
+
+  <div class="answer">
+    <div class="big" id="yearFigure">5.03%</div>
+    <div class="words">
+      <b id="yearHeading">GDP growth, 2024</b>
+      <span id="yearBody">A decade of five-percent years, with one pandemic dip. The full series is BPS annual growth.</span>
+      <div class="credit">BPS, annual series 2015–2024</div>
+    </div>
+  </div>
+
+  <div class="choices" id="yearChoices"></div>
+
+  <div class="chartframe"><svg id="growthBars" viewBox="0 0 1184 240" role="img" aria-label="Bar chart of GDP growth 2015 to 2024"></svg></div>
+
+  <div class="tiles">
+    <div class="tile"><div class="kicker">GDP, 2024</div><div class="figure">Rp22,139T</div><div class="gloss">Total output, about US$1.40 trillion. Per capita: ±US$4,919.</div><div class="credit">BPS, 2024</div></div>
+    <div class="tile"><div class="kicker">Inflation</div><div class="figure">1.57%</div><div class="gloss">Year on year at the end of 2024.</div><div class="credit">BPS, 2024</div></div>
+    <div class="tile"><div class="kicker">Unemployment</div><div class="figure">4.82%</div><div class="gloss">Open unemployment rate, February 2024 survey round.</div><div class="credit">BPS Sakernas, Feb 2024</div></div>
+  </div>
+
+  <footer class="colophon"><span>Indonesia in Numbers · Economy</span><span>Sources on every figure</span></footer>
+</div>
+
+<script src="data.js"></script>
+<script>
+  // One button and one bar per year in the published series. Selecting a
+  // year restates the panel and repaints the bars: the picked year turns
+  // slate, the pandemic contraction is grey, the rest stay red.
+  var series = window.FIGURES.gdpGrowthByYear;
+  var yearNotes = {
+    2020: 'The pandemic year: the only contraction in the series.',
+    2022: 'The strongest year of the decade in this series.',
+    2024: 'The latest full year: growth held at five percent.'
+  };
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  var choicesBox = document.getElementById('yearChoices');
+  var chart = document.getElementById('growthBars');
+
+  function barHeight(value) { return Math.max(14, (value + 2.5) * 22); }
+
+  function paintBars(pickedYear) {
+    chart.querySelectorAll('[data-bar]').forEach(function (bar) {
+      var yr = bar.getAttribute('data-bar');
+      var fill = '#A6192E';
+      if (yr === String(pickedYear)) fill = '#22303E';
+      else if (yr === '2020') fill = '#7A828E';
+      bar.setAttribute('fill', fill);
+    });
+  }
+
+  function chooseYear(year, value) {
+    document.getElementById('yearFigure').textContent = value.toFixed(2) + '%';
+    document.getElementById('yearHeading').textContent = 'GDP growth, ' + year;
+    document.getElementById('yearBody').textContent =
+      yearNotes[year] || 'One of the five-percent years in the BPS series.';
+    choicesBox.querySelectorAll('button').forEach(function (b) {
+      b.classList.toggle('chosen', b.getAttribute('data-year') === String(year));
+    });
+    paintBars(year);
+  }
+
+  series.forEach(function (pair, index) {
+    var year = pair[0], value = pair[1];
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.textContent = year;
+    btn.setAttribute('data-year', year);
+    if (year === 2024) btn.classList.add('chosen');
+    btn.addEventListener('click', function () { chooseYear(year, value); });
+    choicesBox.appendChild(btn);
+
+    var x = 30 + index * 116;
+    var h = barHeight(value);
+    var bar = document.createElementNS(SVGNS, 'rect');
+    bar.setAttribute('x', x); bar.setAttribute('y', 210 - h);
+    bar.setAttribute('width', 74); bar.setAttribute('height', h);
+    bar.setAttribute('rx', 8);
+    bar.setAttribute('fill', year === 2020 ? '#22303E' : '#A6192E');
+    bar.setAttribute('data-bar', year);
+    chart.appendChild(bar);
+
+    var val = document.createElementNS(SVGNS, 'text');
+    val.setAttribute('x', x + 37); val.setAttribute('y', 200 - h);
+    val.setAttribute('text-anchor', 'middle');
+    val.setAttribute('font-size', '15'); val.setAttribute('font-weight', '700'); val.setAttribute('fill', '#22303E');
+    val.textContent = value.toFixed(2);
+    chart.appendChild(val);
+
+    var lab = document.createElementNS(SVGNS, 'text');
+    lab.setAttribute('x', x + 37); lab.setAttribute('y', 232);
+    lab.setAttribute('text-anchor', 'middle');
+    lab.setAttribute('font-size', '12'); lab.setAttribute('fill', '#888888');
+    lab.textContent = year;
+    chart.appendChild(lab);
+  });
+</script>
+</body>
+</html>

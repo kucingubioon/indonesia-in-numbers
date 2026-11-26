@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Indonesia in Numbers — Regions</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="page">
+  <header class="masthead">
+    <div class="wordmark">Indonesia in Numbers</div>
+    <div class="edition">The Map Edition · 2024</div>
+  </header>
+  <nav class="pagenav">
+    <a href="index.html">Overview</a><a href="population.html">Population</a><a href="economy.html">Economy</a><a href="society.html">Society</a><a href="regions.html" class="current">Regions</a>
+  </nav>
+
+  <h1>Regions</h1>
+  <p class="lede">Tap a province bar: the panel below gives its share of the nation.</p>
+
+  <div class="regionbars" id="regionBars"></div>
+
+  <div class="answer">
+    <div class="big" id="regionFigure">129.7M</div>
+    <div class="words">
+      <b id="regionHeading">Three provinces, one island</b>
+      <span id="regionBody">West, East and Central Java combined, calculated from the BPS estimates: nearly half the country. Tap a bar to single one out.</span>
+      <div class="credit">Calculated from BPS, 2024</div>
+    </div>
+  </div>
+
+  <p class="fineprint">*Shares calculated from the BPS provincial estimates against the national mid-2024 total of 284.97 million. Province figures: BPS estimates, 2024.</p>
+  <footer class="colophon"><span>Indonesia in Numbers · Regions</span><span>Sources on every figure</span></footer>
+</div>
+
+<script src="data.js"></script>
+<script>
+  // The bars are built from the same province figures the Overview map
+  // uses, in population order. Tapping a row restates the panel with that
+  // province's own text and marks the row.
+  var order = ['westjava', 'eastjava', 'centraljava'];
+  var shares = { westjava: '17.5%*', eastjava: '14.7%*', centraljava: '13.3%*' };
+  var barsBox = document.getElementById('regionBars');
+  var regionFigure = document.getElementById('regionFigure');
+  var regionHeading = document.getElementById('regionHeading');
+  var regionBody = document.getElementById('regionBody');
+
+  order.forEach(function (key) {
+    var entry = window.FIGURES.province[key];
+    var row = document.createElement('div');
+    row.className = 'regionrow';
+    row.setAttribute('data-key', key);
+
+    var name = document.createElement('div');
+    name.className = 'pname'; name.textContent = entry.label;
+    var track = document.createElement('div');
+    track.className = 'track'; track.style.width = entry.barWidth + '%';
+    var val = document.createElement('div');
+    val.className = 'pval'; val.textContent = entry.short;
+    var share = document.createElement('div');
+    share.className = 'pshare'; share.textContent = shares[key];
+
+    row.appendChild(name); row.appendChild(track); row.appendChild(val); row.appendChild(share);
+    row.addEventListener('click', function () { singleOut(row, entry); });
+    barsBox.appendChild(row);
+  });
+
+  function singleOut(row, entry) {
+    regionFigure.textContent = entry.headline.replace(' million', 'M');
+    regionHeading.textContent = entry.label;
+    regionBody.textContent = entry.body;
+    document.querySelectorAll('.regionrow').forEach(function (other) {
+      other.classList.toggle('picked', other === row);
+    });
+  }
+</script>
+</body>
+</html>

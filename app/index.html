@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Indonesia in Numbers — Overview</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="page">
+  <header class="masthead">
+    <div class="wordmark">Indonesia in Numbers</div>
+    <div class="edition">The Map Edition · 2024</div>
+  </header>
+  <nav class="pagenav">
+    <a href="index.html" class="current">Overview</a><a href="population.html">Population</a><a href="economy.html">Economy</a><a href="society.html">Society</a><a href="regions.html">Regions</a>
+  </nav>
+
+  <h1>Start with the archipelago.<br><span class="accent">284.97 million</span> people live on these islands.</h1>
+  <p class="lede">Tap a marker on Java, or the Java button, and the panel below the map answers. Every figure on this site carries its source.</p>
+
+  <div class="mapframe">
+    <svg viewBox="0 0 1184 400" width="100%" role="img" aria-label="Stylised map of Indonesia">
+      <path d="M118,58 L182,48 L214,88 L202,146 L244,204 L302,272 L336,332 L296,350 L252,276 L202,200 L158,138 L122,102 Z" fill="#A6192E" opacity="0.92"/>
+      <path d="M428,66 L542,40 L646,68 L668,150 L620,228 L516,248 L442,206 L412,128 Z" fill="#A6192E" opacity="0.72"/>
+      <path d="M738,92 L778,76 L794,118 L762,148 L802,186 L848,174 L812,226 L760,214 L724,256 L698,234 L726,184 L700,138 Z" fill="#A6192E" opacity="0.84"/>
+      <path d="M326,318 L566,296 L592,316 L564,340 L342,348 Z" fill="#A6192E"/>
+      <g fill="#A6192E" opacity="0.8"><ellipse cx="626" cy="330" rx="16" ry="7"/><ellipse cx="672" cy="338" rx="22" ry="8"/><ellipse cx="728" cy="344" rx="26" ry="8"/><ellipse cx="798" cy="350" rx="24" ry="8"/></g>
+      <path d="M908,116 L1014,90 L1124,112 L1154,168 L1092,226 L962,238 L896,194 Z" fill="#A6192E" opacity="0.6"/>
+      <g fill="#A6192E" opacity="0.7"><circle cx="872" cy="128" r="7"/><circle cx="898" cy="160" r="6"/><circle cx="862" cy="186" r="5"/></g>
+      <g class="marker" data-key="westjava" transform="translate(392,318)"><circle r="13"/><text y="-20" text-anchor="middle" font-size="14">West Java</text></g>
+      <g class="marker" data-key="centraljava" transform="translate(462,310)"><circle r="13"/><text y="-20" text-anchor="middle" font-size="14">Central Java</text></g>
+      <g class="marker" data-key="eastjava" transform="translate(540,306)"><circle r="13"/><text y="-20" text-anchor="middle" font-size="14">East Java</text></g>
+    </svg>
+  </div>
+
+  <div class="choices"><button id="javaCombined" type="button">Show Java combined</button></div>
+
+  <div class="answer">
+    <div class="big" id="answerFigure">284.97M</div>
+    <div class="words">
+      <b id="answerHeading">Indonesia, mid-2024</b>
+      <span id="answerBody">The world's fourth-largest population, counted by BPS. Tap a province marker to see its weight in the nation.</span>
+      <div class="credit" id="answerCredit">BPS — Statistics Indonesia, 2024</div>
+    </div>
+  </div>
+
+  <div class="strip">
+    <div class="cell"><div class="kicker">Urban share</div><div class="figure">59%</div><div class="gloss">Of Indonesians live in towns and cities (BPS, 2024).</div></div>
+    <div class="cell"><div class="kicker">GDP growth</div><div class="figure">5.03%</div><div class="gloss">In 2024, on output of Rp22,139 trillion, BPS.</div></div>
+    <div class="cell"><div class="kicker">Poverty</div><div class="figure">8.57%</div><div class="gloss">September 2024, down from 9.03% in March, BPS.</div></div>
+    <div class="cell"><div class="kicker">Life expectancy</div><div class="figure">73.9 yrs</div><div class="gloss">For a child born in 2024, BPS.</div></div>
+  </div>
+
+  <h2 class="section">A decade of growth, one line</h2>
+  <p class="lede">GDP growth by year, 2015–2024. The single dip below zero is 2020, the pandemic year. Full controls for this series live on the Economy page.</p>
+  <div class="chartframe"><svg id="trendLine" viewBox="0 0 1184 260" role="img" aria-label="Line chart of GDP growth 2015 to 2024"></svg></div>
+  <div class="credit">BPS, annual series 2015–2024</div>
+
+  <p class="fineprint">Stylised map for orientation; shapes are diagrammatic, not a survey map. Province figures: BPS estimates, 2024.</p>
+  <footer class="colophon"><span>Indonesia in Numbers · Overview</span><span>Sources on every figure</span></footer>
+</div>
+
+<script src="data.js"></script>
+<script>
+  // The answer panel under the map: one function swaps figure, heading,
+  // body and credit together, and marks which marker (or button) is active.
+  var answerFigure = document.getElementById('answerFigure');
+  var answerHeading = document.getElementById('answerHeading');
+  var answerBody = document.getElementById('answerBody');
+  var answerCredit = document.getElementById('answerCredit');
+  var javaButton = document.getElementById('javaCombined');
+
+  function answerWith(key) {
+    var entry = window.FIGURES.province[key];
+    answerFigure.textContent = entry.headline.replace(' million', 'M');
+    answerHeading.textContent = entry.label;
+    answerBody.textContent = entry.body;
+    answerCredit.textContent = entry.credit;
+    document.querySelectorAll('.marker').forEach(function (m) {
+      m.classList.toggle('picked', m.getAttribute('data-key') === key);
+    });
+    javaButton.classList.toggle('chosen', key === 'java');
+  }
+
+  document.querySelectorAll('.marker').forEach(function (m) {
+    m.addEventListener('click', function () { answerWith(m.getAttribute('data-key')); });
+  });
+  javaButton.addEventListener('click', function () { answerWith('java'); });
+
+  // The overview trend line, drawn from the same growth series the
+  // Economy page charts as bars.
+  function drawTrendLine() {
+    var svg = document.getElementById('trendLine');
+    var NS = 'http://www.w3.org/2000/svg';
+    var series = window.FIGURES.gdpGrowthByYear;
+    function xAt(i) { return 60 + i * 118; }
+    function yAt(v) { return 200 - (v + 2.5) * 24; }
+    var zero = document.createElementNS(NS, 'line');
+    zero.setAttribute('x1', 40); zero.setAttribute('x2', 1144);
+    zero.setAttribute('y1', yAt(0)); zero.setAttribute('y2', yAt(0));
+    zero.setAttribute('stroke', '#22303E'); zero.setAttribute('stroke-width', '1.5');
+    zero.setAttribute('stroke-dasharray', '6 5'); zero.setAttribute('opacity', '0.55');
+    svg.appendChild(zero);
+    var points = series.map(function (pair, i) { return xAt(i) + ',' + yAt(pair[1]); }).join(' ');
+    var line = document.createElementNS(NS, 'polyline');
+    line.setAttribute('points', points);
+    line.setAttribute('fill', 'none');
+    line.setAttribute('stroke', '#A6192E'); line.setAttribute('stroke-width', '4');
+    line.setAttribute('stroke-linejoin', 'round'); line.setAttribute('stroke-linecap', 'round');
+    svg.appendChild(line);
+    series.forEach(function (pair, i) {
+      var dot = document.createElementNS(NS, 'circle');
+      dot.setAttribute('cx', xAt(i)); dot.setAttribute('cy', yAt(pair[1])); dot.setAttribute('r', '6');
+      dot.setAttribute('fill', pair[0] === 2020 ? '#22303E' : '#A6192E');
+      dot.setAttribute('stroke', '#FFFFFF'); dot.setAttribute('stroke-width', '2');
+      svg.appendChild(dot);
+      var val = document.createElementNS(NS, 'text');
+      val.setAttribute('x', xAt(i)); val.setAttribute('text-anchor', 'middle');
+      val.setAttribute('y', yAt(pair[1]) + (pair[1] < 0 ? 30 : -14));
+      val.setAttribute('font-size', '15'); val.setAttribute('font-weight', '700'); val.setAttribute('fill', '#22303E');
+      val.textContent = pair[1].toFixed(2);
+      svg.appendChild(val);
+      var yr = document.createElementNS(NS, 'text');
+      yr.setAttribute('x', xAt(i)); yr.setAttribute('y', 238); yr.setAttribute('text-anchor', 'middle');
+      yr.setAttribute('font-size', '12'); yr.setAttribute('fill', '#888888');
+      yr.textContent = pair[0];
+      svg.appendChild(yr);
+    });
+  }
+  drawTrendLine();
+</script>
+</body>
+</html>

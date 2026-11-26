@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Indonesia in Numbers — People &amp; Society</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="page">
+  <header class="masthead">
+    <div class="wordmark">Indonesia in Numbers</div>
+    <div class="edition">The Map Edition · 2024</div>
+  </header>
+  <nav class="pagenav">
+    <a href="index.html">Overview</a><a href="population.html">Population</a><a href="economy.html">Economy</a><a href="society.html" class="current">Society</a><a href="regions.html">Regions</a>
+  </nav>
+
+  <h1>People &amp; Society</h1>
+  <p class="lede">Poverty is measured three times in this window. Tap a reading.</p>
+
+  <div class="choices">
+    <button type="button" data-reading="mar2024">March 2024</button>
+    <button type="button" data-reading="sep2024" class="chosen">September 2024</button>
+    <button type="button" data-reading="mar2025">March 2025</button>
+  </div>
+
+  <div class="answer">
+    <div class="big" id="povertyFigure">8.57%</div>
+    <div class="words">
+      <b>Poverty rate</b>
+      <span id="povertyBody">September 2024 reading: the rate eased through the year.</span>
+      <div class="credit">BPS poverty releases, 2024–2025</div>
+    </div>
+  </div>
+
+  <div class="tiles">
+    <div class="tile"><div class="kicker">Life expectancy</div><div class="figure">73.9 yrs</div><div class="gloss">Expected years of life for a child born in 2024.</div><div class="credit">BPS, 2024</div></div>
+    <div class="tile"><div class="kicker">Literacy, age 15+</div><div class="figure">±96.5%</div><div class="gloss">Share of adults and older teens who can read and write.</div><div class="credit">BPS / World Bank</div></div>
+    <div class="tile"><div class="kicker">Human Development Index</div><div class="figure">75.02</div><div class="gloss">The BPS HDI for 2024, in the high band.</div><div class="credit">BPS, 2024</div></div>
+  </div>
+
+  <h2 class="section">Reading the three poverty numbers together</h2>
+  <p class="lede">March 2024 opened the window at 9.03%. By September 2024 the rate had eased to 8.57%, and the March 2025 reading stepped down again to 8.47% — three BPS releases, one direction.</p>
+  <div class="credit">BPS poverty releases, 2024–2025</div>
+
+  <footer class="colophon"><span>Indonesia in Numbers · People &amp; Society</span><span>Sources on every figure</span></footer>
+</div>
+
+<script src="data.js"></script>
+<script>
+  // Each button carries the key of one BPS poverty release; the panel
+  // restates that release's rate and its one-line reading.
+  var povertyFigure = document.getElementById('povertyFigure');
+  var povertyBody = document.getElementById('povertyBody');
+
+  document.querySelectorAll('[data-reading]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var reading = window.FIGURES.povertyReadings[btn.getAttribute('data-reading')];
+      povertyFigure.textContent = reading.rate;
+      povertyBody.textContent = reading.note;
+      document.querySelectorAll('[data-reading]').forEach(function (other) {
+        other.classList.toggle('chosen', other === btn);
+      });
+    });
+  });
+</script>
+</body>
+</html>

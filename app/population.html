@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Indonesia in Numbers — Population</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="page">
+  <header class="masthead">
+    <div class="wordmark">Indonesia in Numbers</div>
+    <div class="edition">The Map Edition · 2024</div>
+  </header>
+  <nav class="pagenav">
+    <a href="index.html">Overview</a><a href="population.html" class="current">Population</a><a href="economy.html">Economy</a><a href="society.html">Society</a><a href="regions.html">Regions</a>
+  </nav>
+
+  <h1>Population</h1>
+  <p class="lede">Use the buttons: the split bar and the counts restate themselves for each view.</p>
+
+  <div class="choices">
+    <button type="button" data-view="urban" class="chosen">Urban</button>
+    <button type="button" data-view="rural">Rural</button>
+    <button type="button" data-view="both">Both</button>
+  </div>
+
+  <div class="splitbar">
+    <div class="urban" id="urbanSeg" style="width:59%">Urban · 59%</div>
+    <div class="rural" id="ruralSeg" style="width:41%">Rural · 41%</div>
+  </div>
+
+  <div class="answer">
+    <div class="big" id="popFigure">±168 million</div>
+    <div class="words">
+      <b id="popHeading">Urban Indonesians</b>
+      <span id="popBody">Six in ten Indonesians live in towns and cities. Count calculated from the BPS total and the BPS urban share.</span>
+      <div class="credit">BPS, 2024 · count calculated</div>
+    </div>
+  </div>
+
+  <div class="tiles">
+    <div class="tile"><div class="kicker">Total, mid-2024</div><div class="figure">284.97M</div><div class="gloss">Growing at about 0.82% a year.</div><div class="credit">BPS, 2024</div></div>
+    <div class="tile"><div class="kicker">2020 Census</div><div class="figure">270.20M</div><div class="gloss">Counted person by person; the base of every estimate since.</div><div class="credit">BPS Census, 2020</div></div>
+    <div class="tile"><div class="kicker">Added since 2020</div><div class="figure">+14.77M</div><div class="gloss">Growth between the census and mid-2024, calculated from the two BPS figures.</div><div class="credit">Calculated from BPS</div></div>
+  </div>
+
+  <h2 class="section">Where the growth lands</h2>
+  <p class="lede">The national total grows by roughly 0.82% a year, and the urban share rises with it: 59% of Indonesians lived in towns and cities in 2024. The three biggest provinces sit on one island — see them on the Regions page, or tap them on the Overview map.</p>
+  <div class="credit">BPS, 2024</div>
+
+  <footer class="colophon"><span>Indonesia in Numbers · Population</span><span>Sources on every figure</span></footer>
+</div>
+
+<script>
+  // Three readings of the same split bar. The bar itself never changes
+  // (59 / 41 is the published share); the panel restates the count.
+  var readings = {
+    urban: { figure: '±168 million', heading: 'Urban Indonesians', body: 'Six in ten Indonesians live in towns and cities. Count calculated from the BPS total and the BPS urban share.' },
+    rural: { figure: '±117 million', heading: 'Rural Indonesians', body: 'Four in ten still live in rural areas, even as the urban share rises each year. Count calculated from the BPS total and share.' },
+    both: { figure: '284.97 million', heading: 'Everyone, mid-2024', body: 'The whole population in one bar: red is urban, dark is rural, and the two always sum to the BPS total.' }
+  };
+  var popFigure = document.getElementById('popFigure');
+  var popHeading = document.getElementById('popHeading');
+  var popBody = document.getElementById('popBody');
+
+  document.querySelectorAll('[data-view]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var reading = readings[btn.getAttribute('data-view')];
+      popFigure.textContent = reading.figure;
+      popHeading.textContent = reading.heading;
+      popBody.textContent = reading.body;
+      document.querySelectorAll('[data-view]').forEach(function (other) {
+        other.classList.toggle('chosen', other === btn);
+      });
+    });
+  });
+</script>
+</body>
+</html>
